@@ -52,6 +52,14 @@ func GetConfig() *Config {
 		config.UserHeaderName = n
 	}
 
+	if urlstr := viper.GetString("SALT_API_URL"); urlstr != "" {
+		saltApiUrl, err := url.Parse(urlstr)
+		if err != nil {
+			log.Fatal().Err(err).Msg("SALT_API_URL is invalid")
+		}
+		config.SaltApiUrl = saltApiUrl
+	}
+
 	config.ReverseProxy = viper.GetBool("REVERSE_PROXY")
 
 	log.Info().Msgf("listen port %d", config.Port)
